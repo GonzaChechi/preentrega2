@@ -2,6 +2,7 @@
 // estara la posibilidad de calcular el promedio de las notas del curso
 // y la cantidad de alumnos varones y mujeres que integran el curso
 
+
 let nombreAlumno;
 let notaAlumno = 0;
 let edadAlumno;
@@ -10,7 +11,6 @@ let alumnosArray = [];
 let contHombre = 0;
 let contMujer = 0;
 let operacion;
-let cantAlumnos;
 let sumaNotas = 0;
 let contAlumnos = 0;
 let sumaEdad = 0;
@@ -19,6 +19,7 @@ let porcHombre;
 let promedioNota = 0;
 let promedioEdad = 0;
 let alumno;
+let nAlumno;
 
 
 class Alumno {
@@ -30,7 +31,10 @@ class Alumno {
     }
 }
 
+//!-----------------------Funciona para pedir la cantidad de alumnos a ingresar--------------------
 function pedidoCantAlumnos() {
+    let cantAlumnos
+
     do {
         cantAlumnos = +prompt('Ingrese la cantidad de alumnos que desea ingresar' + '\n'
             + 'máximo 3');
@@ -40,9 +44,10 @@ function pedidoCantAlumnos() {
             contAlumnos = contAlumnos + cantAlumnos;
         }
     } while (cantAlumnos <= 0 || cantAlumnos > 3);
+    return cantAlumnos;
 }
-
-function pedidoDatosAlumnos() {
+//!-----------------------Funcion donde se piden los datos de los alumnos--------------------
+function pedidoDatosAlumnos(cantAlumnos) {
     for (let k = 1; k <= cantAlumnos; k++) {
         do {
             nombreAlumno = prompt(`Ingrese nombre del alumno ${k}`);  // Nombre de alumnos
@@ -62,7 +67,7 @@ function pedidoDatosAlumnos() {
         edadAlumno = +prompt('Ingrese Edad'); // Edad de alumnos
         sumaEdad = sumaEdad + edadAlumno;
         do {
-            sexoAlumno = +prompt('Ingrese sexo del alumon' + '\n' // Sexo de alumnos
+            sexoAlumno = +prompt('Ingrese sexo del alumno' + '\n' // Sexo de alumnos
                 + '1. Hombre' + '\n'
                 + '2. Mujer' + '\n');
             switch (sexoAlumno) {
@@ -76,25 +81,27 @@ function pedidoDatosAlumnos() {
                     alert('El valor ingreasdo es incorrecto, por favor ingrese nuevamente');
             }
         } while (sexoAlumno !== 1 && sexoAlumno !== 2);
-        if (sexoAlumno == 1) {
+        if (sexoAlumno == 1) {  //se convierte la opcion de sexo en la cadena qeu corresponde a la opcion
             sexoAlumno = "Hombre";
         } else if (sexoAlumno == 2) {
             sexoAlumno = "Mujer";
         }
-        alumno = new Alumno(nombreAlumno, notaAlumno, edadAlumno, sexoAlumno);
-        alumnosArray.push(alumno);
+        alumno = new Alumno(nombreAlumno, notaAlumno, edadAlumno, sexoAlumno); //se crea el objeto
+        alumnosArray.push(alumno); //se agrega el objerto al array
     }
 }
 
+//!-----------------------Funcion para calcular promedio de edad--------------------
 function calculoPromEdad() {
     if (sumaEdad === 0) {
         alert('Aún no ha ingresado datos de alumnos');
     } else {
         promedioEdad = sumaEdad / contAlumnos;
-        alert(`La edad proedio de los ${contAlumnos} alumnos ingresados es ${promedioEdad}`);
+        alert(`La edad promedio de los ${contAlumnos} alumnos ingresados es ${promedioEdad}`);
     }
 }
 
+//!-----------------------Funcion para calcular promedio de notas--------------------
 function calculoPromNotas() {
     if (sumaNotas === 0) {
         alert('Aun no ha ingresado datos de alumnos');
@@ -104,6 +111,7 @@ function calculoPromNotas() {
     }
 }
 
+//!-----------------------Funcion para calcular promedio de edad--------------------
 function calculoSexo() {
     if (contHombre == 0 && contMujer == 0) {
         alert('Aun no ha ingresado datos de alumnos');
@@ -116,6 +124,9 @@ function calculoSexo() {
     }
 }
 
+
+
+//!-----------------------Funcion para mostrar los datos calculados--------------------
 function mostrarDatos() {
     if (contAlumnos === 0) {
         alert('Aun no ha ingresado datos de alumnos');
@@ -139,18 +150,95 @@ function mostrarDatos() {
     }
 }
 
-function mostrarAlumnos() {
-    if (contAlumnos == 0) {
-        alert('Aun no ha ingresado datos de alumnos');
+//!-----------------------Funcion menu buscador--------------------
+function menuBuscar() {
+    let buscar;
+    do {
+        buscar = +prompt(
+            "¿Que dato desea buscar?" + '\n'
+            + "1.Nombre" + '\n'
+            + "2.Nota" + '\n'
+            + "3.Edad" + '\n'
+            + "0. Volver al Menú Principal");
+        switch (buscar) {
+            case 1:
+                buscarNombre();
+                break;
+            case 2:
+                buscarNota();
+                break;
+            case 3:
+                buscarEdad();
+                break;
+            default:
+                if (buscar !== 0) {
+                alert("INGRESO UNA OPCIÓN INCORRECTA!!");
+            }
+            break;
+        }
+    } while (buscar !== 0)
+
+}
+
+
+//!-----------------------Funcion recorrer Array y mostrar------------------------
+function recorrer(array) {
+    console.clear();
+    let cont = 0;
+    if (array == "") {
+        alert("NO SE HAN ENCONTRADO ALUMNOS");
     } else {
-        console.clear();
-        alumnosArray.forEach(informacion => {
+        array.forEach(informacion => {
+            cont++;
             console.log(
                 "Alumno: " + informacion.nombre + '\n' +
-                "Edad: " + informacion.edad + '\n' +
+                "Edad: " + informacion.edad + " Años" + '\n' +
                 "Sexo: " + informacion.sexo + '\n' +
                 "Nota: " + informacion.nota) + '\n';
         });
+    }
+    return cont;
+}
+//!-----------------------Funcion buscar por nombre--------------------
+function buscarNombre() {
+    if (contAlumnos == 0) {
+        alert('AUN NO HA INGRESADO DATOS DE ALUMNOS!');
+    } else {
+        nAlumno = prompt("Ingrese el nombre del alumno/s que desea buscar");
+        nAlumno = nAlumno.toUpperCase();
+        const al = alumnosArray.filter(info => info.nombre == nAlumno);
+        const res=recorrer(al);
+        if(res!==0){
+            alert(`${res} Alumnos se llaman ${nAlumno}`+'\n'+` Por consola podra ver los datos de los alumnos`);
+        }
+    }
+}
+
+//!-----------------------Funcion buscar por nota--------------------
+function buscarNota() {
+    if (contAlumnos == 0) {
+        alert('AUN NO HA INGRESADO DATOS DE ALUMNOS!');
+    } else {
+        nAlumno = +prompt("Ingrese la nota que desea buscar");
+        const al = alumnosArray.filter(info => info.nota == nAlumno);
+        const res=recorrer(al);
+        if(res!==0){
+            alert(`${res} Alumnos sacaron la nota ${nAlumno}`+'\n'+` Por consola podra ver los datos del alumno/s`);
+        }
+    }
+}
+
+//!-----------------------Funcion buscar por edad--------------------
+function buscarEdad() {
+    if (contAlumnos == 0) {
+        alert('AUN NO HA INGRESADO DATOS DE ALUMNOS!');
+    } else {
+        nAlumno = +prompt("Ingrese la edad que desea buscar");
+        const al = alumnosArray.filter(info => info.edad == nAlumno);
+        const res=recorrer(al);
+        if(res!==0){
+            alert(`${res} Alumno/s tienen ${nAlumno} años`+'\n'+ `Por consola podra ver los datos del alumno/s`);
+        }
     }
 }
 
@@ -163,12 +251,12 @@ do {
         + '4. Calcular % de varones y mujeres que hay en los alumnos que ingresó.' + '\n'
         + '5. Mostrar resumen de datos ingresados' + '\n'
         + '6. Datos del alumno' + '\n'
-        + '7. Salir del programa.');
+        + '7. Buscar Alumnos' + '\n'
+        + '0. Salir del programa.');
 
     switch (operacion) {
         case 1:
-            pedidoCantAlumnos();
-            pedidoDatosAlumnos();
+            pedidoDatosAlumnos(pedidoCantAlumnos());
             break;
         case 2:
             calculoPromEdad();
@@ -183,10 +271,21 @@ do {
             mostrarDatos();
             break;
         case 6:
-            mostrarAlumnos()
+            const res= recorrer(alumnosArray);
+            if(res!==0){
+                alert(`En total ha ingresado ${res} alumnos, por consola podra ver los datos del alumno/s`);
+            }
+            break;
+        case 7:
+            menuBuscar();
+            break;
+        default:
+            if (operacion !== 0) {
+                alert("INGRESO UNA OPCIÓN INCORRECTA!!");
+            }
             break;
     }
-} while (operacion !== 7 && operacion !== 0);
+} while (operacion !== 0);
 alert('Usted a salido del programa, refresque para comenzar nuevamente');
 
 
